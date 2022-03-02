@@ -1,0 +1,34 @@
+﻿@page "/"
+
+<Modal @ref="Modal"></Modal>
+
+<div class="wordle" tabindex="0" @ref="inputHandler" @onkeydown="e => KeyDownAsync(e)">
+	<div class="wordle-grid">
+		@for (int row = 0; row < wordleGrid.MaximumGuesses; row++)
+		{
+		<div class="wordle-row">
+			@for (int tile = 0; tile < 5; tile++)
+			{
+				@if (wordleGrid.Guesses.Count > row && wordleGrid.Guesses[row].Count > tile)
+				{
+					<span class="wordle-tile @Enum.GetName(typeof(LetterState), wordleGrid.Guesses[row][tile].State)">@wordleGrid.Guesses[row][tile].Letter</span>
+				}
+				else
+				{
+					<span class="wordle-tile"></span>
+				}
+			}
+		</div>
+		}
+	</div>
+	
+	<div class="wordle-information">
+		<div class="wordle-row">
+			<span class="wordle-tile InWord">T</span>
+			<span class="wordle-tile NotInWord">Y</span>
+			<span class="wordle-tile NotInWord">P</span>
+			<span class="wordle-tile CorrectPosition">E</span>
+		</div>
+		<span class="wordle-further">to get started!</span>
+	</div>
+</div>
