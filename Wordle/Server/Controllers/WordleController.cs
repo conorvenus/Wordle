@@ -25,11 +25,11 @@ namespace Wordle.Server.Controllers
 		{
 			// Set the guess to lowercase as this is the format the words are in.
 			guess = guess.ToLower();
-			// If the guessed word is 5 letters.
-			if (Regex.IsMatch(guess, "^[a-zA-Z]{5}$"))
+			// Gets a list of 5 letter words.
+			List<string> words = wordleService.GetWords();
+			// If the guessed word is 5 letters and is a real word.
+			if (Regex.IsMatch(guess, "^[a-zA-Z]{5}$") && words.Contains(guess))
 			{
-				// Gets a list of 5 letter words.
-				List<string> words = wordleService.GetWords();
 				// Generates a random 'daily' word seeded by the current date.
 				string word = words[new Random((int)(DateTime.Now.Date - new DateTime(1970, 1, 1)).TotalSeconds).Next(words.Count)];
 				// Calculates correct letters and their respective states.

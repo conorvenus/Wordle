@@ -52,14 +52,22 @@ namespace Wordle.Client.Pages
 				// Join their guess letters into a single word.
 				string guess = string.Join("", wordleGrid.Guesses[wordleGrid.RowIndex].Select(letter => letter.Letter));
 				// Send a request to the backend.
-				List<WordleLetter> guessState = await httpClient.GetFromJsonAsync<List<WordleLetter>>($"api/daily/{guess}");
-				wordleGrid.Guesses[wordleGrid.RowIndex] = guessState.Select(letter => new WordleLetter(letter.Letter.ToString().ToUpper()[0], letter.State)).ToList();
-				wordleGrid.RowIndex += 1;
-				// If all letters match, game over, they won!
-				if (guessState.Count(letterState => letterState.State == LetterState.CorrectPosition) == 5)
+				try
 				{
-					Modal.Show($"{guess} was correct!");
-					StateHasChanged();
+					List<WordleLetter> guessState = await httpClient.GetFromJsonAsync<List<WordleLetter>>($"api/daily/{guess}");
+					wordleGrid.Guesses[wordleGrid.RowIndex] = guessState.Select(letter => new WordleLetter(letter.Letter.ToString().ToUpper()[0], letter.State)).ToList();
+					wordleGrid.RowIndex += 1;
+					// If all letters match, game over, they won!
+					if (guessState.Count(letterState => letterState.State == LetterState.CorrectPosition) == 5)
+					{
+						Modal.Show($"{guess} was correct!");
+						StateHasChanged();
+					}
+				}
+				catch (HttpRequestException ex)
+				{
+					if (ex.StatusCode != System.Net.HttpStatusCode.BadRequest)
+						Console.WriteLine(ex);
 				}
 			}
 		}
