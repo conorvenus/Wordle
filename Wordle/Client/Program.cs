@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Wordle.Client.Services;
 
 namespace Wordle.Client
 {
@@ -17,6 +18,7 @@ namespace Wordle.Client
 			var builder = WebAssemblyHostBuilder.CreateDefault(args);
 			builder.RootComponents.Add<App>("#app");
 
+			builder.Services.AddSingleton<ReplayService>();
 			builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 			await builder.Build().RunAsync();

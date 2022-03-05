@@ -1,3 +1,4 @@
 ﻿<div class="modal @(isHidden ? "hidden" : "")">
 	@Message
+	<button class="replay-button" @onclick="async () => await ReplayAsync()">Rewatch!</button>
 </div>

@@ -4,24 +4,46 @@
 
 <div class="wordle" tabindex="0" @ref="inputHandler" @onkeydown="e => KeyDownAsync(e)">
 	<div class="wordle-grid">
-		@for (int row = 0; row < wordleGrid.MaximumGuesses; row++)
+		@if (!replayService.isReplaying)
 		{
-		<div class="wordle-row">
-			@for (int tile = 0; tile < 5; tile++)
+			@for (int row = 0; row < wordleGrid.MaximumGuesses; row++)
 			{
-				@if (wordleGrid.Guesses.Count > row && wordleGrid.Guesses[row].Count > tile)
-				{
-					<span class="wordle-tile @Enum.GetName(typeof(LetterState), wordleGrid.Guesses[row][tile].State)">@wordleGrid.Guesses[row][tile].Letter</span>
-				}
-				else
-				{
-					<span class="wordle-tile"></span>
-				}
+				<div class="wordle-row">
+					@for (int tile = 0; tile < 5; tile++)
+					{
+						@if (wordleGrid.Guesses.Count > row && wordleGrid.Guesses[row].Count > tile)
+						{
+							<span class="wordle-tile @Enum.GetName(typeof(LetterState), wordleGrid.Guesses[row][tile].State)">@wordleGrid.Guesses[row][tile].Letter</span>
+						}
+						else
+						{
+							<span class="wordle-tile"></span>
+						}
+					}
+				</div>
 			}
-		</div>
+		}
+		else
+		{
+			@for (int row = 0; row < wordleGrid.MaximumGuesses; row++)
+			{
+				<div class="wordle-row">
+					@for (int tile = 0; tile < 5; tile++)
+					{
+						@if (replayService.Grid.Guesses.Count > row && replayService.Grid.Guesses[row].Count > tile)
+						{
+							<span class="wordle-tile @Enum.GetName(typeof(LetterState), replayService.Grid.Guesses[row][tile].State)">@replayService.Grid.Guesses[row][tile].Letter</span>
+						}
+						else
+						{
+							<span class="wordle-tile"></span>
+						}
+					}
+				</div>
+			}
 		}
 	</div>
-	
+
 	<div class="wordle-information">
 		<div class="wordle-row">
 			<span class="wordle-tile InWord">T</span>
